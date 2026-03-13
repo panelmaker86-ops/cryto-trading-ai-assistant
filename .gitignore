@@ -1,0 +1,20 @@
+# Strategy Guardian AI
+.venv/
+venv/
+env/
+.env
+.env.mock
+.env*.mock
+*.pyc
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.db
+dist/
+build/
+*.egg-info/

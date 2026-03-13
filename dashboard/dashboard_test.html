@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Strategy Guardian AI — Monitor risk, validate strategy rules, and detect emotional trading in real time." />
+  <title>Strategy Guardian AI — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #08090c;
+      --bg-elevated: #0e0f14;
+      --bg-card: #13151b;
+      --bg-card-hover: #181b22;
+      --sidebar: #0c0d11;
+      --border: #1e2128;
+      --border-subtle: #181a21;
+      --text: #8c929d;
+      --text-strong: #f0f2f5;
+      --text-muted: #525861;
+      --green: #0d9488;
+      --green-bg: rgba(13, 148, 136, 0.1);
+      --red: #dc2626;
+      --red-bg: rgba(220, 38, 38, 0.1);
+      --amber: #d97706;
+      --amber-bg: rgba(217, 119, 6, 0.1);
+      --blue: #2563eb;
+      --blue-bg: rgba(37, 99, 235, 0.1);
+      --accent: #4f46e5;
+      --accent-bg: rgba(79, 70, 229, 0.12);
+      --accent-hover: #6366f1;
+      --sans: 'Inter', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --transition: 0.15s ease;
+      --sidebar-w: 240px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: 0.01em;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .app {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    .sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .sidebar-brand {
+      padding: 1.25rem 1.25rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .sidebar-brand .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      color: var(--text-strong);
+      letter-spacing: -0.02em;
+    }
+    .sidebar-brand .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(145deg, var(--accent) 0%, #6366f1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sidebar-brand .logo-icon svg {
+      width: 16px;
+      height: 16px;
+      color: rgba(255, 255, 255, 0.95);
+    }
+    .sidebar-brand .logo span { color: var(--accent); }
+    .sidebar-brand .tagline {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      margin-top: 0.375rem;
+      margin-left: 2.5rem;
+      letter-spacing: 0.02em;
+    }
+    .sidebar-nav {
+      flex: 1;
+      padding: 0.75rem 0.5rem;
+    }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      margin-bottom: 2px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      cursor: default;
+    }
+    .sidebar-nav a:hover {
+      color: var(--text-strong);
+      background: var(--bg-card);
+    }
+    .sidebar-nav a.active {
+      color: var(--accent);
+      background: var(--accent-bg);
+    }
+    .sidebar-nav a svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.85;
+    }
+    .sidebar-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .sidebar-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+    .sidebar-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 2px var(--green-bg);
+    }
+    .main-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .topbar {
+      height: 52px;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-elevated);
+      flex-shrink: 0;
+    }
+    .topbar-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .topbar-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-left: 0.75rem;
+      font-weight: 400;
+    }
+    .main {
+      flex: 1;
+      padding: 1.5rem;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      align-self: stretch;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .card:hover {
+      border-color: var(--border-subtle);
+      box-shadow: var(--shadow-md);
+    }
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.875rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .card-header h2 {
+      margin: 0;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .card-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.125rem;
+      line-height: 1.4;
+    }
+    .alert-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .alert-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.875rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      background: var(--bg-elevated);
+    }
+    .alert-item.info   { border-left: 3px solid var(--blue);  background: var(--blue-bg);  }
+    .alert-item.warning { border-left: 3px solid var(--amber); background: var(--amber-bg); }
+    .alert-item.critical { border-left: 3px solid var(--red);  background: var(--red-bg);   }
+    .alert-item .alert-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .alert-item .title {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      color: var(--text-strong);
+    }
+    .alert-item .message { font-size: 0.8125rem; color: var(--text); line-height: 1.4; }
+    .alert-item .meta {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .alert-item .trade-tag {
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      padding: 0.15rem 0.4rem;
+      background: var(--bg-card);
+      border-radius: 4px;
+      color: var(--text);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge.info    { background: var(--blue-bg);  color: #93c5fd; }
+    .badge.warning { background: var(--amber-bg); color: #fcd34d; }
+    .badge.critical { background: var(--red-bg);  color: #fca5a5; }
+    .btn {
+      font: inherit;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      padding: 0.4375rem 0.875rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text-strong);
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--text-muted);
+    }
+    .btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .btn.primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+    .panel { display: none; }
+    .panel.is-active { display: block; }
+    .section-title {
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .account-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .account-card {
+      padding: 1rem 1.125rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+    .account-card .label {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .account-card .value {
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-strong);
+    }
+    .account-card .value.positive { color: var(--green); }
+    .account-card .value.negative { color: var(--red); }
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+    .risk-item {
+      padding: 0.875rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+    .risk-item label {
+      display: block;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .risk-item input {
+      width: 100%;
+      font: inherit;
+      font-family: var(--mono);
+      font-size: 0.875rem;
+      padding: 0.5rem 0.625rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text-strong);
+    }
+    .card-actions {
+      margin-top: 1rem;
+      padding-top: 0.875rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+    .trades-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+    .trades-table th,
+    .trades-table td {
+      padding: 0.5rem 0.875rem;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+    .trades-table th {
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+    }
+    .trades-table tbody tr:nth-child(even) { background: rgba(255,255,255,.015); }
+    .trades-table tbody tr:hover { background: var(--bg-card-hover); }
+    .trades-table .num { text-align: right; font-family: var(--mono); }
+    .trades-table .side-long { color: var(--green); font-weight: 500; }
+    .trades-table .side-short { color: var(--red); font-weight: 500; }
+    .trades-table .pnl-pos { color: var(--green); font-family: var(--mono); text-align: right; }
+    .trades-table .pnl-neg { color: var(--red); font-family: var(--mono); text-align: right; }
+    .sidebar-nav a { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+            </svg>
+          </div>
+          Strategy <span>Guardian</span> AI
+        </div>
+        <p class="tagline">Monitor only · No auto-trading</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-tab active" data-tab="alerts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Alerts
+        </a>
+        <a href="#" class="nav-tab" data-tab="risk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Risk
+        </a>
+        <a href="#" class="nav-tab" data-tab="trades">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Trades
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status">Connected</div>
+      </div>
+    </aside>
+    <div class="main-wrap">
+      <header class="topbar">
+        <span class="topbar-title" id="topbar-title">Alerts</span>
+        <span class="topbar-sub" id="topbar-sub">Guardian warnings and risk alerts</span>
+      </header>
+      <main class="main">
+        <div id="panel-alerts" class="panel is-active">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2>Alert feed</h2>
+              <p class="card-desc">Auto-refresh every 30s. Risk, strategy, and behavior warnings.</p>
+            </div>
+            <button type="button" class="btn">Refresh</button>
+          </div>
+          <div class="alert-list">
+            <div class="alert-item warning">
+              <div class="alert-row">
+                <span class="badge warning">Warning</span>
+                <span class="title">Risk per trade exceeded</span>
+                <span class="meta" style="margin-left:auto;">2m ago</span>
+              </div>
+              <div class="message">This trade risks ~6.5% of your capital. Your strategy rule is max 3%.</div>
+              <div class="meta">
+                <span>risk_engine.position_risk</span>
+                <span class="trade-tag">BTCUSDT long · 0.01 @ $65,000.00</span>
+              </div>
+            </div>
+            <div class="alert-item info">
+              <div class="alert-row">
+                <span class="badge info">Info</span>
+                <span class="title">High volatility</span>
+                <span class="meta" style="margin-left:auto;">5m ago</span>
+              </div>
+              <div class="message">24h volatility is 4.2%. Consider smaller size.</div>
+              <div class="meta">
+                <span>ai_analysis.market_risk_scanner</span>
+              </div>
+            </div>
+            <div class="alert-item critical">
+              <div class="alert-row">
+                <span class="badge critical">Critical</span>
+                <span class="title">Daily loss limit reached</span>
+                <span class="meta" style="margin-left:auto;">12m ago</span>
+              </div>
+              <div class="message">Today's loss is 5.2% of equity. Your rule is max 5% daily loss. Consider stopping for today.</div>
+              <div class="meta">
+                <span>risk_engine.drawdown_monitor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <div id="panel-risk" class="panel">
+          <div class="card">
+            <p class="section-title">Account overview</p>
+            <h2 style="margin-bottom: 0.5rem;">Binance</h2>
+            <p class="card-desc" style="margin-bottom: 1rem;">Live balance and equity from exchange.</p>
+            <div class="account-cards">
+              <div class="account-card">
+                <div class="label">Balance</div>
+                <div class="value">$12,450.00</div>
+              </div>
+              <div class="account-card">
+                <div class="label">Equity</div>
+                <div class="value">$12,580.50</div>
+              </div>
+              <div class="account-card">
+                <div class="label">Unrealized PnL</div>
+                <div class="value positive">+$130.50</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <p class="section-title">Risk parameters</p>
+            <h2 style="margin-bottom: 0.25rem;">Guardian rules</h2>
+            <p class="card-desc">Alerts are sent when a trade exceeds these limits.</p>
+            <div class="risk-grid">
+              <div class="risk-item">
+                <label>Max risk per trade (%)</label>
+                <input type="number" value="3" min="0.5" max="100" step="0.5" />
+              </div>
+              <div class="risk-item">
+                <label>Max daily loss (%)</label>
+                <input type="number" value="5" min="1" max="100" step="0.5" />
+              </div>
+              <div class="risk-item">
+                <label>Max leverage</label>
+                <input type="number" value="10" min="1" max="125" />
+              </div>
+              <div class="risk-item">
+                <label>Max position (% of balance)</label>
+                <input type="number" value="20" min="1" max="100" />
+              </div>
+            </div>
+            <div class="card-actions">
+              <button type="button" class="btn primary">Save rules</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="panel-trades" class="panel">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2>Trade history</h2>
+                <p class="card-desc">Monitored by Guardian. Auto-refresh every 15s.</p>
+              </div>
+              <button type="button" class="btn">Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table class="trades-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Exchange</th>
+                    <th>Symbol</th>
+                    <th>Side</th>
+                    <th>Size</th>
+                    <th>Entry</th>
+                    <th>Leverage</th>
+                    <th>PnL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>10:32:15</td>
+                    <td>binance</td>
+                    <td class="mono">BTCUSDT</td>
+                    <td class="side-long">long</td>
+                    <td class="num">0.01</td>
+                    <td class="mono num">$65,000.00</td>
+                    <td class="num">5×</td>
+                    <td class="pnl-pos">$125.50</td>
+                  </tr>
+                  <tr>
+                    <td>09:15:42</td>
+                    <td>binance</td>
+                    <td class="mono">ETHUSDT</td>
+                    <td class="side-short">short</td>
+                    <td class="num">0.5</td>
+                    <td class="mono num">$3,420.00</td>
+                    <td class="num">10×</td>
+                    <td class="pnl-neg">-$42.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="card-desc" style="margin-top: 0.5rem; margin-bottom: 0;">Last updated 10:35:22</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script>
+    (function() {
+      var tabs = [
+        { id: 'alerts', title: 'Alerts', sub: 'Guardian warnings and risk alerts' },
+        { id: 'risk', title: 'Risk & account', sub: 'Account overview and risk parameters' },
+        { id: 'trades', title: 'Trade history', sub: 'Monitored trades' }
+      ];
+      document.querySelectorAll('.nav-tab').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          var tab = this.getAttribute('data-tab');
+          document.querySelectorAll('.nav-tab').forEach(function(l) { l.classList.remove('active'); });
+          this.classList.add('active');
+          document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('is-active'); });
+          var panel = document.getElementById('panel-' + tab);
+          if (panel) panel.classList.add('is-active');
+          var t = tabs.find(function(x) { return x.id === tab; });
+          if (t) {
+            document.getElementById('topbar-title').textContent = t.title;
+            document.getElementById('topbar-sub').textContent = t.sub;
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

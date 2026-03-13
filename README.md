@@ -8,9 +8,9 @@ Strategy Guardian AI monitors your trading in real time: it validates risk rules
 
 ## Contact
 
-**Telegram:** [@galileo0106](https://t.me/galileo0106)
+I have years of real trading experience building and running automation like this in live markets. If you want help tailoring the bot to your strategy and improving your results, feel free to contact me on Telegram any time.
 
-For support, feature requests, or questions, reach out via Telegram.
+[![Telegram](https://img.shields.io/badge/Telegram-Contact%20me-blue?style=for-the-badge&logo=telegram)](https://t.me/galileo0000)
 
 ---
 
@@ -177,4 +177,8 @@ MIT.
 
 *Strategy Guardian AI — Protection and intelligence for traders, without full automation.*
 
-**Telegram:** [@galileo0106](https://t.me/galileo0106)
+## Contact
+
+I have years of real trading experience building and running automation like this in live markets. If you want help tailoring the bot to your strategy and improving your results, feel free to contact me on Telegram any time.
+
+[![Telegram](https://img.shields.io/badge/Telegram-Contact%20me-blue?style=for-the-badge&logo=telegram)](https://t.me/galileo0000)

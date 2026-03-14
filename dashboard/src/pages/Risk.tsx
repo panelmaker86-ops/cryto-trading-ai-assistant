@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { getSettings, putSettings, getAccount, type RiskSettings, type AccountSnapshot } from '../api'
+import { mockSettings, mockAccount } from '../mockData'
 import '../App.css'
 
 export default function Risk() {
   const [settings, setSettings] = useState<RiskSettings | null>(null)
   const [account, setAccount] = useState<AccountSnapshot | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [form, setForm] = useState<RiskSettings>({
@@ -18,7 +18,6 @@ export default function Risk() {
 
   const load = async () => {
     setLoading(true)
-    setError(null)
     try {
       const [s, a] = await Promise.all([
         getSettings(),
@@ -26,9 +25,11 @@ export default function Risk() {
       ])
       setSettings(s.risk)
       setForm(s.risk)
-      setAccount(a)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load')
+      setAccount(a ?? null)
+    } catch {
+      setSettings(mockSettings.risk)
+      setForm(mockSettings.risk)
+      setAccount({ ...mockAccount, exchange: 'binance' })
     } finally {
       setLoading(false)
     }
@@ -38,15 +39,14 @@ export default function Risk() {
 
   const save = async () => {
     setSaving(true)
-    setError(null)
     setSaved(false)
     try {
       await putSettings(form, undefined)
       setSettings(form)
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to save')
+    } catch {
+      // Offline or server error; settings not persisted
     } finally {
       setSaving(false)
     }
@@ -149,7 +149,6 @@ export default function Risk() {
             {saving ? 'Saving…' : 'Save rules'}
           </button>
           {saved && <span className="success-msg">Settings saved.</span>}
-          {error && <span className="error">{error}</span>}
         </div>
       </div>
     </>

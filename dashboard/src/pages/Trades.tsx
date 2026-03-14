@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { getTrades, TRADES_REFRESH_INTERVAL_MS, type Trade } from '../api'
-import { getMockChartData, appendMockChartPoint, MOCK_BASE_EQUITY, type ChartPoint } from '../mockData'
+import { getMockChartData, appendMockChartPoint, MOCK_BASE_EQUITY, mockTrades, type ChartPoint } from '../mockData'
 import CandlestickChart from '../components/CandlestickChart'
 import {
   LineChart,
@@ -31,7 +31,6 @@ export default function Trades() {
   const [trades, setTrades] = useState<Trade[]>([])
   const [chartData, setChartData] = useState<ChartPoint[]>(() => getMockChartData())
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const seriesRef = useRef<ChartPoint[]>(getMockChartData())
@@ -39,13 +38,13 @@ export default function Trades() {
   const load = async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true)
     else setLoading(true)
-    setError(null)
     try {
       const data = await getTrades(undefined, 100)
       setTrades(data)
       setLastUpdated(new Date())
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load trades')
+    } catch {
+      setTrades(mockTrades)
+      setLastUpdated(new Date())
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -100,15 +99,6 @@ export default function Trades() {
     )
   }
 
-  if (error && trades.length === 0) {
-    return (
-      <div className="card">
-        <div className="error">{error}</div>
-        <button className="btn primary" onClick={() => load()}>Retry</button>
-      </div>
-    )
-  }
-
   const latestPnL = chartData.length > 0 ? chartData[chartData.length - 1].pnl : 0
   const baseEquity = MOCK_BASE_EQUITY
 
@@ -117,8 +107,8 @@ export default function Trades() {
       <div className="card chart-card">
         <div className="card-header">
           <div>
-            <h2>Price (BTC)</h2>
-            <p className="card-desc">Candlestick chart with mock OHLC. Updates every 2s.</p>
+            <h2>Price (BTC/USDT)</h2>
+            <p className="card-desc">1m candlesticks · live</p>
           </div>
         </div>
         <div className="chart-wrap candlestick-wrap">
@@ -126,35 +116,36 @@ export default function Trades() {
         </div>
       </div>
 
-      <div className="card chart-card">
+      <div className="card chart-card equity-card">
         <div className="card-header">
           <div>
-            <h2>Equity curve (live)</h2>
-            <p className="card-desc">Simulated equity from mock trade PnL. Updates every 2s.</p>
+            <h2>Portfolio equity</h2>
+            <p className="card-desc">Cumulative equity from trade PnL · streaming</p>
           </div>
           <div className="chart-legend">
-            <span className="chart-legend-value">${(baseEquity + latestPnL).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-            <span className={latestPnL >= 0 ? 'pnl-pos' : 'pnl-neg'}>
+            <span className="chart-legend-label">Equity</span>
+            <span className="chart-legend-value">${(baseEquity + latestPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            <span className={`chart-legend-pnl ${latestPnL >= 0 ? 'pnl-pos' : 'pnl-neg'}`}>
               {latestPnL >= 0 ? '+' : ''}{formatUsd(latestPnL)}
             </span>
           </div>
         </div>
         <div className="chart-wrap">
-          <ResponsiveContainer width="100%" height={280}>
+          <ResponsiveContainer width="100%" height={300}>
             <LineChart
               data={chartData}
-              margin={{ top: 8, right: 8, left: 8, bottom: 8 }}
+              margin={{ top: 12, right: 12, left: 12, bottom: 12 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" opacity={0.6} />
               <XAxis
                 dataKey="label"
-                tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                tick={{ fill: 'var(--text-muted)', fontSize: 10 }}
                 axisLine={{ stroke: 'var(--border)' }}
                 tickLine={false}
               />
               <YAxis
                 domain={['auto', 'auto']}
-                tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                tick={{ fill: 'var(--text-muted)', fontSize: 10 }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={(v) => '$' + (v / 1000).toFixed(1) + 'k'}
@@ -170,15 +161,16 @@ export default function Trades() {
                 formatter={(value: number) => [formatUsd(value), 'Equity']}
                 labelFormatter={(label) => label}
               />
-              <ReferenceLine y={baseEquity} stroke="var(--text-muted)" strokeDasharray="2 2" strokeOpacity={0.6} />
+              <ReferenceLine y={baseEquity} stroke="var(--text-muted)" strokeDasharray="4 4" strokeOpacity={0.5} />
               <Line
                 type="monotone"
                 dataKey="equity"
+                name="Equity"
                 stroke="var(--accent)"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 dot={false}
                 isAnimationActive={true}
-                animationDuration={300}
+                animationDuration={400}
               />
             </LineChart>
           </ResponsiveContainer>

@@ -95,22 +95,22 @@ Copy `.env.example` to `.env` and configure:
 cryto-trading-ai-assistant/
 ├── app/
 │   ├── main.py              # FastAPI application, API routes, webhook
-│   ├── config.py             # Application settings
-│   ├── database.py           # Async SQLite/PostgreSQL
-│   ├── guardian.py           # Guardian orchestration
-│   ├── models.py             # Pydantic models
+│   ├── config.py            # Application settings
+│   ├── database.py          # Async SQLite/PostgreSQL
+│   ├── guardian.py          # Guardian orchestration
+│   ├── models.py            # Pydantic models
 │   └── db/
-│       ├── models.py         # SQLAlchemy (settings, alerts, trades)
-│       └── repository.py     # CRUD operations
-├── dashboard/                # React dashboard (alerts, risk, trade history)
+│       ├── models.py        # SQLAlchemy (settings, alerts, trades)
+│       └── repository.py    # CRUD operations
+├── dashboard/               # React dashboard (alerts, risk, trade history)
 ├── modules/
 │   ├── exchange_connector/  # Binance, Bybit
-│   ├── risk_engine/          # Position risk, leverage, drawdown
-│   ├── strategy_validator/   # Rule engine
-│   ├── emotion_detector/     # Behavior model
-│   ├── ai_analysis/          # Trade feedback, market risk scanner
-│   └── alerts/               # Telegram, Discord
-├── images/                   # Screenshots for documentation
+│   ├── risk_engine/         # Position risk, leverage, drawdown
+│   ├── strategy_validator/  # Rule engine
+│   ├── emotion_detector/   # Behavior model
+│   ├── ai_analysis/         # Trade feedback, market risk scanner
+│   └── alerts/              # Telegram, Discord
+├── images/                  # Screenshots for documentation
 ├── requirements.txt
 ├── .env.example
 └── README.md
@@ -169,16 +169,4 @@ Data is persisted in SQLite by default (or `DATABASE_URL` if set).
 
 ---
 
-## License
-
-MIT.
-
----
-
-*Strategy Guardian AI — Protection and intelligence for traders, without full automation.*
-
-## Contact
-
-I have years of real trading experience building and running automation like this in live markets. If you want help tailoring the bot to your strategy and improving your results, feel free to contact me on Telegram any time.
-
-[![Telegram](https://img.shields.io/badge/Telegram-Contact%20me-blue?style=for-the-badge&logo=telegram)](https://t.me/galileo0000)
+*Strategy Guardian AI — Protection and intelligence for manual traders, without full automation.*

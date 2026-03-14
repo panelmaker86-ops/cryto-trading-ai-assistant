@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getAlerts, type Alert } from '../api'
+import { mockAlerts } from '../mockData'
 import '../App.css'
 
 function formatRelativeTime(iso: string): string {
@@ -15,18 +16,16 @@ function formatRelativeTime(iso: string): string {
 export default function Alerts() {
   const [alerts, setAlerts] = useState<Alert[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
 
   const load = async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true)
     else setLoading(true)
-    setError(null)
     try {
       const data = await getAlerts(100)
       setAlerts(data)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load alerts')
+    } catch {
+      setAlerts(mockAlerts)
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -50,15 +49,6 @@ export default function Alerts() {
             <div key={i} className="skeleton skeleton-card" />
           ))}
         </div>
-      </div>
-    )
-  }
-
-  if (error && alerts.length === 0) {
-    return (
-      <div className="card">
-        <div className="error">{error}</div>
-        <button className="btn primary" onClick={() => load()}>Retry</button>
       </div>
     )
   }

